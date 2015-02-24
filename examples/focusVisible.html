@@ -142,13 +142,12 @@ document.addEventListener( "valueClicked", function( event ) {
     and can be reached via the Tab and Shift+Tab keys.
   </p>
   <p>
-    For an aggregate focus to make sense, the component <em>must</em> provide
-    a way for the user to reach all its core functions with the keyboard,
+    For an aggregate focus to make sense, the component <em>must</em> provide a
+    way for the user to reach all its core functions with the keyboard,
     regardless of which element within the component actually has the real
-    focus. In this example, pressing the "R", "G", or "B" keys have the same
-    effect of pressing the Red, Green, or Blue buttons, respectively. Regardless
-    of whether the button is accessed via a keyboard shortcut or clicked/tapped,
-    the component displays a message in the console.
+    focus. In this example, pressing the "R", "G", or "B" keys while the
+    component has the focus has the same effect of pressing the Red, Green, or
+    Blue buttons, respectively.
   </p>
   <input type="text"/>
   <focus-example></focus-example>
