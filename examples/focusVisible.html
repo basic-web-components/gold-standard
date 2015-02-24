@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>sample-spinner</title>
+<link rel="import" href="../bower/polymer/polymer.html">
+<script src="../bower/webcomponentsjs/webcomponents.js"></script>
+</head>
+  
+<polymer-element name="focus-example">
+<template>
+  <style>
+  :host {
+    display: -webkit-inline-flex;
+    display: inline-flex;
+  }
+  
+  :host(.focus) {
+    outline: 1px dotted; /* Safari/IE */
+    outline: auto 5px -webkit-focus-ring-color; /* Chrome/Webkit */
+  }
+
+  button {
+    margin: 0;
+  }
+  </style>
+  <button tabindex="-1">Red</button>
+  <button tabindex="-1">Green</button>
+  <button tabindex="-1">Blue</button>
+</template>
+<script>
+Polymer({
+
+  ready: function() {
+    if (this.getAttribute("tabIndex") == null) {
+      // No tabIndex specified; use default value.
+      this.tabIndex = 0;
+    }
+    var buttons = this.shadowRoot.querySelectorAll( "button" );
+    [].forEach.call( buttons, function( button ) {
+      button.addEventListener( "focus", function() {
+        this.classList.add( "focus" );
+      }.bind( this ));
+      button.addEventListener( "blur", function() {
+        this.classList.remove( "focus" );
+      }.bind( this ));
+    }.bind( this ));
+  }
+
+});
+ </script>
+</polymer-element>
+  
+<body>
+  <input type="text"/>
+  <focus-example></focus-example>
+  <input type="text"/>
+</body>
+</html>

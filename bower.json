@@ -1,0 +1,7 @@
+{
+  "name": "gold-standard-components-examples",
+  "version": "0.0.1",
+  "dependencies": {
+    "polymer": "Polymer/polymer#0.5.4"
+  }
+}
