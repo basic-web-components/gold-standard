@@ -16,8 +16,12 @@ body {
 p {
   max-width: 800px;
 }
+
+#message {
+  display: none;
+}
 </style>
-  
+
 <polymer-element name="focus-example">
 <template>
   <style>
@@ -69,6 +73,12 @@ Polymer({
         // Restore the component's previous place in the tab order.
         this.tabIndex = this._previousTabIndex;
       }.bind( this ));
+      button.addEventListener( "click", function( event ) {
+        var text = event.target.textContent;
+        if ( text ) {
+          this.trigger( text );
+        }
+      }.bind( this ));
     }.bind( this ));
 
     this.addEventListener( "focus", function() {
@@ -79,11 +89,46 @@ Polymer({
       // Hide the aggregate focus rectangle.
       this.classList.remove( "focus" );
     });
+    this.addEventListener( "keypress", function( event ) {
+      switch ( event.which ) {
+        case 66:
+        case 98:
+          this.trigger( "Blue" );
+          break;
+
+        case 71:
+        case 103:
+          this.trigger( "Green" );
+          break;
+
+        case 82:
+        case 114:
+          this.trigger( "Red" );
+          break;
+      }
+    });
+  },
+
+  trigger: function( value ) {
+    var event = new CustomEvent( "valueClicked", {
+      bubbles: true,
+      detail: {
+        value: value
+      }
+    });
+    this.dispatchEvent( event );
   }
 
 });
  </script>
 </polymer-element>
+
+<script>
+document.addEventListener( "valueClicked", function( event ) {
+  document.querySelector( "#value" ).textContent = event.detail.value;
+  document.querySelector( "#message" ).style.display = "inherit";
+});
+</script>
 
 </head>
   
@@ -96,8 +141,20 @@ Polymer({
     are acting as a single unit. This component also appears in the tab order,
     and can be reached via the Tab and Shift+Tab keys.
   </p>
+  <p>
+    For an aggregate focus to make sense, the component <em>must</em> provide
+    a way for the user to reach all its core functions with the keyboard,
+    regardless of which element within the component actually has the real
+    focus. In this example, pressing the "R", "G", or "B" keys have the same
+    effect of pressing the Red, Green, or Blue buttons, respectively. Regardless
+    of whether the button is accessed via a keyboard shortcut or clicked/tapped,
+    the component displays a message in the console.
+  </p>
   <input type="text"/>
   <focus-example></focus-example>
   <input type="text"/>
+  <p id="message">
+    You pressed <span id="value"/>.
+  </p>
 </body>
 </html>
