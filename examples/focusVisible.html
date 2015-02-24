@@ -2,56 +2,100 @@
 <html>
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
 <title>sample-spinner</title>
 <link rel="import" href="../bower/polymer/polymer.html">
 <script src="../bower/webcomponentsjs/webcomponents.js"></script>
-</head>
+
+<style>
+body {
+  margin: 0;
+  padding: 30px;
+}
+
+p {
+  max-width: 800px;
+}
+</style>
   
 <polymer-element name="focus-example">
 <template>
   <style>
   :host {
+    /* Keep buttons together. */
     display: -webkit-inline-flex;
     display: inline-flex;
   }
   
+  /* An aggregate focus rectangle for the component as a unit. */
   :host(.focus) {
     outline: 1px dotted; /* Safari/IE */
     outline: auto 5px -webkit-focus-ring-color; /* Chrome/Webkit */
   }
 
   button {
+    /* Keep buttons together. */
     margin: 0;
   }
   </style>
-  <button tabindex="-1">Red</button>
-  <button tabindex="-1">Green</button>
-  <button tabindex="-1">Blue</button>
+  <button>Red</button>
+  <button>Green</button>
+  <button>Blue</button>
 </template>
 <script>
 Polymer({
 
   ready: function() {
     if (this.getAttribute("tabIndex") == null) {
-      // No tabIndex specified; use default value.
+      // No tabIndex specified; use zero as default to place element in tab order.
       this.tabIndex = 0;
     }
+
     var buttons = this.shadowRoot.querySelectorAll( "button" );
     [].forEach.call( buttons, function( button ) {
-      button.addEventListener( "focus", function() {
-        this.classList.add( "focus" );
+      // Remove buttons from default tab order.
+      button.tabIndex = -1;
+      button.addEventListener( "focus", function( event ) {
+        // When a button gets the focus, temporarily remove the component from
+        // the tab order. This is done to handle the scenario where the user
+        // clicks a button, then presses Shift+Tab. In that case, we want the
+        // focus to move to the element before this component in the tab order.
+        // Without the lines below, however, the focus would leave the button
+        // but remain on the component.
+        this._previousTabIndex = this.tabIndex;
+        this.tabIndex = -1;
       }.bind( this ));
-      button.addEventListener( "blur", function() {
-        this.classList.remove( "focus" );
+      button.addEventListener( "blur", function( event ) {
+        // Restore the component's previous place in the tab order.
+        this.tabIndex = this._previousTabIndex;
       }.bind( this ));
     }.bind( this ));
+
+    this.addEventListener( "focus", function() {
+      // Show the aggregate focus rectangle.
+      this.classList.add( "focus" );
+    });
+    this.addEventListener( "blur", function() {
+      // Hide the aggregate focus rectangle.
+      this.classList.remove( "focus" );
+    });
   }
 
 });
  </script>
 </polymer-element>
+
+</head>
   
 <body>
+  <p>
+    In this contrived example, a single component presents three button
+    elements. These are all individually clickable, but from the user
+    perspective, the buttons don't receive the focus. Instead, the focus gets
+    placed on the overall component. This reinforces the idea that the buttons
+    are acting as a single unit. This component also appears in the tab order,
+    and can be reached via the Tab and Shift+Tab keys.
+  </p>
   <input type="text"/>
   <focus-example></focus-example>
   <input type="text"/>
