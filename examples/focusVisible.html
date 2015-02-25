@@ -92,7 +92,7 @@ Polymer({
       button.addEventListener( "click", function( event ) {
         var text = event.target.textContent;
         if ( text ) {
-          this.trigger( text );
+          this.handleClick( text );
         }
       }.bind( this ));
     }.bind( this ));
@@ -109,23 +109,23 @@ Polymer({
       switch ( event.which ) {
         case 66:
         case 98:
-          this.trigger( "Blue" );
+          this.handleClick( "Blue" );
           break;
 
         case 71:
         case 103:
-          this.trigger( "Green" );
+          this.handleClick( "Green" );
           break;
 
         case 82:
         case 114:
-          this.trigger( "Red" );
+          this.handleClick( "Red" );
           break;
       }
     });
   },
 
-  trigger: function( value ) {
+  handleClick: function( value ) {
     var event = new CustomEvent( "valueClicked", {
       bubbles: true,
       detail: {
