@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
-<title>sample-spinner</title>
+<title>Focus Visible example</title>
 <link rel="import" href="../bower/polymer/polymer.html">
 <script src="../bower/webcomponentsjs/webcomponents.js"></script>
 
@@ -38,8 +38,24 @@ p {
   }
 
   button {
-    /* Keep buttons together. */
+    border: 1px solid #888;
+    background: #e8e8e8;
     margin: 0;
+    outline: none; /* Let component present aggregate focus indicator. */
+    padding: 5px 8px;
+  }
+  button + button {
+    margin-left: -1px; /* Let borders overlap. */
+  }
+
+  button:hover {
+    border-color: black;
+    background: #f8f8f8;
+    z-index: 1;
+  }
+
+  button:active {
+    background: #bbb;
   }
   </style>
   <button>Red</button>
@@ -137,9 +153,11 @@ document.addEventListener( "valueClicked", function( event ) {
     In this contrived example, a single component presents three button
     elements. These are all individually clickable, but from the user
     perspective, the buttons don't receive the focus. Instead, the focus gets
-    placed on the overall component. This reinforces the idea that the buttons
-    are acting as a single unit. This component also appears in the tab order,
-    and can be reached via the Tab and Shift+Tab keys.
+    placed on the overall component. (The focus indicator is only visible on
+    desktop devices.) This reinforces the idea that the buttons are acting as a
+    single unit. This component also appears in the tab order, and can be
+    reached via the Tab and Shift+Tab keys. This sample page includes two text
+    inputs to make it easier to see the focus moving through the component.
   </p>
   <p>
     For an aggregate focus to make sense, the component <em>must</em> provide a
